@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using ByteBank.Forum.Models;
+using System.Threading.Tasks;
 using ByteBank.Forum.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -14,7 +15,7 @@ namespace ByteBank.Forum.Controllers
         }
 
         [HttpPost]
-        public ActionResult Registrar(ContaRegistrarViewModel modelo)
+        public async Task<ActionResult> Registrar(ContaRegistrarViewModel modelo)
         {
             if (ModelState.IsValid)
             {
@@ -27,7 +28,7 @@ namespace ByteBank.Forum.Controllers
                 novoUsuario.UserName = modelo.UserName;
                 novoUsuario.NomeCompleto = modelo.NomeCompleto;
 
-                userManager.Create(novoUsuario, modelo.Senha);
+                await userManager.CreateAsync(novoUsuario, modelo.Senha);
 
                 return RedirectToAction("Index", "Home");
             }
