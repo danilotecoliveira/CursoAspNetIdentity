@@ -38,6 +38,10 @@ namespace ByteBank.Forum
                 };
 
                 userManager.EmailService = new EmailServico();
+                var dataProvider = opcoes.DataProtectionProvider;
+                var create = dataProvider.Create("bytebank.forum");
+
+                userManager.UserTokenProvider = new DataProtectorTokenProvider<UsuarioAplicacao>(create);
 
                 return userManager;
             });
