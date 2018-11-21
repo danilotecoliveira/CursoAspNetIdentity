@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ByteBank.Forum.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System;
 
 namespace ByteBank.Forum.Controllers
 {
@@ -45,12 +46,35 @@ namespace ByteBank.Forum.Controllers
                 novoUsuario.UserName = modelo.UserName;
                 novoUsuario.NomeCompleto = modelo.NomeCompleto;
 
-                await UserManager.CreateAsync(novoUsuario, modelo.Senha);
+                var usuario = UserManager.FindByEmail(novoUsuario.Email);
+                var usuarioExiste = usuario != null;
 
-                return RedirectToAction("Index", "Home");
+                if (usuarioExiste)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                var resultado = await UserManager.CreateAsync(novoUsuario, modelo.Senha);
+
+                if (resultado.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    AdicionaErros(resultado);
+                }
             }
 
             return View(modelo);
+        }
+
+        private void AdicionaErros(IdentityResult resultado)
+        {
+            foreach (var item in resultado.Errors)
+            {
+                ModelState.AddModelError("", item);
+            }
         }
     }
 }
