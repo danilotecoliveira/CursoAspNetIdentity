@@ -37,6 +37,8 @@ namespace ByteBank.Forum
                     CaracterDigito = true
                 };
 
+                userManager.EmailService = new EmailServico();
+
                 return userManager;
             });
         }
