@@ -46,7 +46,7 @@ namespace ByteBank.Forum.Controllers
                 novoUsuario.UserName = modelo.UserName;
                 novoUsuario.NomeCompleto = modelo.NomeCompleto;
 
-                var usuario = UserManager.FindByEmail(novoUsuario.Email);
+                var usuario = await UserManager.FindByEmailAsync(novoUsuario.Email);
                 var usuarioExiste = usuario != null;
 
                 if (usuarioExiste)
